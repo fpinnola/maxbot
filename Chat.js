@@ -6,10 +6,16 @@ export default function Chat() {
 
     const [input, setInput] = useState("");
     const [messages, setMessages] = useState([
+
         {
             text: "Hello I'm Max, your virtual assistant. How are you doing today?",
             userID: "max",
-            time: Math.round(new Date().getTime()/1000)
+            time: Math.round(new Date().getTime())
+        },
+        {
+            time: Math.round(new Date().getTime() - 1),
+            text: "Today",
+            userID: "system"
         }
     ]);
 
@@ -60,15 +66,25 @@ export default function Chat() {
   return (
     <View style={styles.container}>
       <FlatList 
-        style={{height: "100%", width: "100%"}}
+        style={{ width: "100%", flex: 1,  }}
         data={messages.sort(function (x, y) {
             return y.time - x.time;
         })}
         keyExtractor={(item) => String(item.time)}
         renderItem={({item, index}) => {
+            if (item.userID === "system") {
+                return (
+                    <View style={{width: "100%", alignItems: "center", padding: 10}}>
+                        <View style={{backgroundColor: "rgba(243,0,255,0.17)", width: 90, height: 35, justifyContent: "center", alignItems: "center", borderRadius: 20}}>
+                            <Text style={{fontFamily: "Lato-Bold", fontSize: 16, color: "#8F00FF"}}>Today</Text>
+                        </View>
+                    </View>
+
+                )
+            }
             if (item.userID === "max") {
                 return (
-                    <View style={{width: "100%", padding: 10}}>
+                    <View style={{width: "100%", padding: 10, alignItems: "flex-start"}}>
                         <View style={[{maxWidth: 300, padding: 10, backgroundColor: "#fff", borderRadius: 10 }, styles.shadow]}>
                             <Text style={styles.messageText}>{item.text}</Text>
                         </View>

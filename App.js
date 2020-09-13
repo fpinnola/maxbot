@@ -19,7 +19,6 @@ export default function App() {
   if (fontsLoaded) {
     return <Chat />;
   } else {
-    console.log("loading");
     return (
       <View>
         <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />
