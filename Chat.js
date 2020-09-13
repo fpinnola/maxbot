@@ -1,13 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity , FlatList } from 'react-native';
 
 //TODO: Optimize bottom bar for different phone shapes
 export default function Chat() {
 
-    const [message, editMessage] = useState("Hello I am Max 0.1");
     const [input, setInput] = useState("");
-    const [sent, setSent] = useState(false);
     const [messages, setMessages] = useState([
         {
             text: "Hello I'm Max, your virtual assistant. How are you doing today?",

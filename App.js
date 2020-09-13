@@ -1,18 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, View, TouchableOpacityBase } from 'react-native';
 import Chat from "./Chat.js"
 import * as Font from 'expo-font';
+import { AppLoading } from "expo";
 
 
-export default function App() {
-
+const getFonts = () => 
   Font.loadAsync({
     'Lato-Regular': require('./assets/fonts/Lato-Regular.ttf'),
     'Lato-Bold': require('./assets/fonts/Lato-Bold.ttf'),
-
   });
 
-  return (
-      <Chat/>
-  );
+
+export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+
+  if (fontsLoaded) {
+    return <Chat />;
+  } else {
+    console.log("loading");
+    return (
+      <View>
+        <AppLoading startAsync={getFonts} onFinish={() => setFontsLoaded(true)} />
+      </View>
+    )
+  }
 }
