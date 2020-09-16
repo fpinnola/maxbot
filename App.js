@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacityBase } from 'react-native';
 import Chat from "./Chat.js"
 import * as Font from 'expo-font';
 import { AppLoading } from "expo";
+import MainStack from "./mainstack"
 
 
 const getFonts = () => 
@@ -17,7 +18,7 @@ export default function App() {
 
 
   if (fontsLoaded) {
-    return <Chat />;
+    return <MainStack />;
   } else {
     return (
       <View>
