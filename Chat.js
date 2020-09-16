@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity , FlatList } from 'react-native';
+import { useHeaderHeight } from 'react-navigation-stack';
+
 
 //TODO: Optimize bottom bar for different phone shapes
 export default function Chat() {
@@ -18,6 +20,7 @@ export default function Chat() {
             userID: "system"
         }
     ]);
+    const headerHeight = useHeaderHeight();
 
     const addMessage = (text, id) => {
         let current = messages;
@@ -103,7 +106,7 @@ export default function Chat() {
         }}
         inverted={true}
         />
-      <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={0} style={{width: "100%"}}>
+      <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} keyboardVerticalOffset={headerHeight} style={{width: "100%"}}>
         <View  style={{flexDirection:"row", backgroundColor: "white", width: "100%", height: 70, alignItems: "center", paddingHorizontal: 15}}>
             <View style={[{height: 40, flex:1, borderRadius: 20, alignItems: "center", borderColor: "#ccc", borderWidth: 1}, styles.shadow]}>
                 <TextInput 
