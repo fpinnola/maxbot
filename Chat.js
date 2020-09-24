@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity , FlatList } from 'react-native';
+import { Slider, StyleSheet, Image, Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity , FlatList } from 'react-native';
 import { useHeaderHeight } from 'react-navigation-stack';
 
 
@@ -7,6 +7,9 @@ import { useHeaderHeight } from 'react-navigation-stack';
 export default function Chat() {
 
     const [input, setInput] = useState("");
+    const [feelingLoggerOpen, setFeelingLoggerOpen] = useState(false);
+    const [sliderColor, setSliderColor] = useState("#AAA");
+    const [sliderVal, setSliderVal] = useState(0.5);
     const [messages, setMessages] = useState([
 
         {
@@ -65,9 +68,97 @@ export default function Chat() {
             })
     }}
 
+    const getRGB = (min, max, val) => {
+        let ratio = (val-min) / (max-min);
+        console.log(ratio);
+        let r, g;
+        if(ratio < 0.5) {
+            r = 255;
+            g = Math.round(2* ratio * 255);
+        } else {
+            r = Math.round(255 * (1 - ratio) * 2);
+            g = 255;
+        }
+
+        let b = 0;
+        return {
+            r: r,
+            g: g,
+            b: b
+        }
+    }
+
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+      }
+      
+    function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    function feelingString(value) {
+        if (value < 2) {
+            return "Very Poorly"
+        } else if (value < 4) {
+            return "Unwell"
+        } else if (value < 6) {
+            return "Fair"
+        } else if (value < 8) {
+            return "Pretty Good"
+        } else {
+            return "Great!"
+        }
+    }
+
+    const feelingLogger = () => {
+        return (
+        <View style={{width: "100%", height: 275, backgroundColor: "#fff", alignItems: "center", justifyContent: "space-around", position: "absolute", bottom: 0, zIndex: 1}}>
+            <Text style={textStyles.header}>How are you feeling?</Text>
+        <Text style={textStyles.subheader}>{feelingString(sliderVal)}</Text>
+            <View style={{height: 60, width: "100%", alignItems: "center", marginBottom: 35}}>
+                <Slider
+                    style={{width: "90%", height: 40}}
+                    minimumValue={0}
+                    maximumValue={10}
+                    value={sliderVal}
+                    minimumTrackTintColor={sliderColor}
+                    maximumTrackTintColor={sliderColor}
+                    onValueChange={(val) => {
+                        var rgb = getRGB(0,10,val);
+                        console.log(rgb);
+                        let newValue = rgbToHex(rgb.r, rgb.g, rgb.b);
+                        setSliderColor(newValue);
+                        setSliderVal(val);
+                    }}
+                />
+                <TouchableOpacity 
+                onPress={()=> {
+                    //TODO: Log Feelings
+                    setFeelingLoggerOpen(false);
+                }}
+                style={{width: "90%", height: 45, backgroundColor: "#8F00FF", borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
+                    <Text style={[textStyles.buttonText]}>Done</Text>
+
+                </TouchableOpacity>
+            </View>
+        </View>
+        )
+
+    }
+
 
   return (
     <View style={styles.container}>
+      {feelingLoggerOpen ? feelingLogger() :      
+        <TouchableOpacity 
+        onPress={() => {
+            setFeelingLoggerOpen(true);
+        }}
+        style={{position: "absolute",zIndex: 1, width: 50, height: 50, justifyContent: "center", alignItems: "center", backgroundColor: "#8F00FF", borderRadius: 25, right: 25, top: 25}}>
+            <Image style={{height: 24, width: 24}} source={require('./assets/medical.png')}/>
+        </TouchableOpacity>
+      }
       <FlatList 
         style={{ width: "100%", flex: 1,  }}
         data={messages.sort(function (x, y) {
@@ -156,3 +247,20 @@ const styles = StyleSheet.create({
       fontSize: 16
   }
 });
+
+
+const textStyles = StyleSheet.create({
+    header: {
+        fontFamily: "Lato-Bold",
+        fontSize: 22
+    },
+    subheader: {
+        fontFamily: "Lato-Bold",
+        fontSize: 18
+    },
+    buttonText: {
+        fontFamily: "Lato-Bold",
+        fontSize: 18,
+        color: "#fff"
+    }
+})
