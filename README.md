@@ -1,8 +1,8 @@
-# maxbot
-A personal assistant chatbot mobile app for tracking mood 
+# solas
+A logging app to track and find patterns of chronic illness symptoms 
 
 # To Run
 
-    install expo
-
+    npm install
+    
     expo start
