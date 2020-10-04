@@ -5,6 +5,7 @@ import {
   import { createAppContainer } from "react-navigation";
   import Chat from "./Chat";
 import Splash from "./splash";
+import LogList from "./logList";
 
   const screens = {
     Splash: {
@@ -14,6 +15,14 @@ import Splash from "./splash";
                 headerShown: false,
             };  
         }  
+    },
+    LogList: {
+      screen: LogList,
+      navigationOptions: () => {
+        return {
+            headerShown: true,
+        };  
+      }  
     },
     Chat: {
         screen: Chat,
