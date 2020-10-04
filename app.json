@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "maxbot",
-    "slug": "maxbot",
+    "name": "salus",
+    "slug": "salus",
     "version": "1.0.0",
+    "privacy": "unlisted",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.frankpinnola.salus"
     },
     "web": {
       "favicon": "./assets/favicon.png"
