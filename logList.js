@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Modal, Text, FlatList, TouchableOpacity, TextInput, Image, StyleSheet, Alert, AsyncStorage } from "react-native";
+import { View, Modal, Text, FlatList, SectionList, TouchableOpacity, TextInput, Image, StyleSheet, Alert, AsyncStorage } from "react-native";
 import Chat from './Chat';
 import FeelingLogger from './feelingLogger';
 
 export default function LogList({ navigation }) {
-    const [list, setList] = useState([])
+    const [list, setList] = useState([]);
+    const [logs, setLogs] = useState([]);
     const [addLogVisible, setAddLogVisible] = useState(false);
     const [logText, setLogText] = useState("");
     const [feelingLog, setFeelingLog] = useState(null);
@@ -12,9 +13,9 @@ export default function LogList({ navigation }) {
     useEffect(() => {
         restoreLogsFromAsync();
       }, []);
-    
+
     const storeLogs = logs => {
-        const stringifiedLogs = JSON.stringify(list);
+        const stringifiedLogs = JSON.stringify(logs);
 
         AsyncStorage.setItem('@logs', stringifiedLogs).catch((err) => {
             console.warn('Error storing logs in Async');
@@ -27,7 +28,8 @@ export default function LogList({ navigation }) {
         .then(stringifiedLogs => {
             const parsedLogs = JSON.parse(stringifiedLogs);
             if (parsedLogs != null) {
-                setList(parsedLogs);
+                // setList(parsedLogs);
+                setLogs(parsedLogs);
             }
         })
         .catch((err) => {
@@ -36,6 +38,32 @@ export default function LogList({ navigation }) {
         })
     }
     //TODO: truncate number of lines, open up full log by clicking on it
+
+    const getList = () => {
+        let tempLogs = logs;
+        let tempList = [];
+        let tempDict = {};
+
+        for (let i = 0; i < tempLogs.length; i++) {
+            let preDate = new Date(tempLogs[i].date);
+            let date = preDate.getFullYear() + " " + preDate.getMonth() + " " + preDate.getDay();
+            if (tempDict[date] === undefined) {
+                tempDict[date] = {
+                    title: getSectionTitle(preDate),
+                    data: [tempLogs[i]]
+                };
+            } else {
+                let tempData = tempDict[date].data;
+                tempData.push(tempLogs[i]);
+                tempDict[date].data = tempData;
+            }
+        }
+        for (var prop in tempDict) {
+            tempList.push(tempDict[prop]);
+        }
+        tempList.reverse();
+        return tempList;
+    }
 
     function getMonthStr(month) {
         switch (month) {
@@ -53,6 +81,24 @@ export default function LogList({ navigation }) {
             case 12: return "Dec";
             default: return "IDK";
         }
+    }
+
+    function getSectionTitle(timestamp) {
+        var date = new Date(timestamp);
+        var currentDate = new Date();
+
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var year = date.getFullYear();
+        month = getMonthStr(month);
+
+        var str = month + " " + day;
+
+        if (year != currentDate.getFullYear()) {
+            str += " " + date.getFullYear();
+        }
+
+        return str;
     }
 
     function getFormattedDate(timestamp) {
@@ -111,7 +157,7 @@ export default function LogList({ navigation }) {
                         setFeelingLog(feeling);
                     }}/>
                     <Text style={{marginTop: 25, fontFamily: "Lato-Regular", fontSize: 18, textAlign: "left", width: "90%"}}>Describe how you're feeling</Text>
-                    <View style={{width: "90%", height: 150,  backgroundColor: "white", borderRadius: 5, marginTop: 15, justifyContent: "center", alignItems: "center"}}>
+                    <View style={{width: "90%", height: 150,  backgroundColor: "white", borderRadius: 10, marginTop: 15, justifyContent: "center", alignItems: "center"}}>
                         <TextInput 
                         style={{height: "95%", width: "95%"}}
                         multiline={true}
@@ -126,7 +172,7 @@ export default function LogList({ navigation }) {
                     <TouchableOpacity 
                     style={{paddingHorizontal: 25, paddingVertical: 7.5, backgroundColor: "#8F00FF", borderRadius: 7.5,marginTop: 15}}
                     onPress={()=> {
-                        var curr = list;
+                        // var curr = list;
                         let log = {
                             log: logText,
                             date: Date.now()
@@ -136,7 +182,7 @@ export default function LogList({ navigation }) {
                         }
                         console.log(log);
                         curr.push(log);
-                        setList(curr);
+                        // setList(curr);
                         setLogText("");
                         storeLogs(curr);
                         setAddLogVisible(false);
@@ -145,10 +191,21 @@ export default function LogList({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </Modal>
-            <FlatList 
-            style={{width: "100%"}}
-                data={list}
+            <SectionList 
+                style={{width: "100%", marginTop: 5}}
+                sections={getList()}
                 keyExtractor={(item) => item.log}
+                stickySectionHeadersEnabled={false}
+                renderSectionHeader={({ section: { title } }) => {
+                    console.log(title);
+                    return (
+                        <View style={{width: "100%", paddingVertical: 5, justifyContent: "center", alignItems: "center"}}>
+                            <View style={{width: "85%"}}>
+                                <Text style={{fontFamily: "Lato-Bold", fontSize: 16, color: "#444"}}>{title}</Text>
+                            </View>
+                        </View>
+                    )
+                }}
                 renderItem={({ item }) => {
                     return (
                         <View style={{width: "100%", paddingVertical: 10, justifyContent: "center", alignItems: "center"}}>
@@ -194,4 +251,4 @@ const styles = StyleSheet.create({
         height: 32,
         width: 32,
     }
-})
+});
