@@ -45,7 +45,7 @@ function feelingString(value) {
 
 export default function FeelingLogger(props) {
     const [sliderColor, setSliderColor] = useState("#AAA");
-    const [sliderVal, setSliderVal] = useState(0.5);
+    const [sliderVal, setSliderVal] = useState(5);
 
     return (
     <View style={{width: "90%", borderRadius: 10, backgroundColor: "#fff", alignItems: "center", justifyContent: "center", paddingVertical: 25}}>
