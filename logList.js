@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Modal, Text, FlatList, TouchableOpacity, TextInput, Image, StyleSheet, Alert, AsyncStorage } from "react-native";
-import Chat from './Chat'
+import Chat from './Chat';
+import FeelingLogger from './feelingLogger';
+
 export default function LogList({ navigation }) {
     const [list, setList] = useState([])
     const [addLogVisible, setAddLogVisible] = useState(false);
     const [logText, setLogText] = useState("");
+    const [feelingLog, setFeelingLog] = useState(null);
 
     useEffect(() => {
         restoreLogsFromAsync();
@@ -71,6 +74,20 @@ export default function LogList({ navigation }) {
         return str;
     }
 
+    function feelingString(value) {
+        if (value < 2) {
+            return "Very Poorly"
+        } else if (value < 4) {
+            return "Unwell"
+        } else if (value < 6) {
+            return "Fair"
+        } else if (value < 8) {
+            return "Pretty Good"
+        } else {
+            return "Great!"
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Modal 
@@ -90,8 +107,11 @@ export default function LogList({ navigation }) {
                     >
                         <Text style={{color: "red", width: "100%", textAlign: "right", fontFamily: "Lato-Bold", fontSize: 14}}>Close</Text>
                     </TouchableOpacity>
-                    <Text style={{marginTop: 25, fontFamily: "Lato-Regular", fontSize: 18, textAlign: "left", width: "80%"}}>Describe how you're feeling</Text>
-                    <View style={{width: "80%", height: 120,  backgroundColor: "white", borderRadius: 5, marginTop: 15, justifyContent: "center", alignItems: "center"}}>
+                    <FeelingLogger setFeeling={(feeling) => {
+                        setFeelingLog(feeling);
+                    }}/>
+                    <Text style={{marginTop: 25, fontFamily: "Lato-Regular", fontSize: 18, textAlign: "left", width: "90%"}}>Describe how you're feeling</Text>
+                    <View style={{width: "90%", height: 150,  backgroundColor: "white", borderRadius: 5, marginTop: 15, justifyContent: "center", alignItems: "center"}}>
                         <TextInput 
                         style={{height: "95%", width: "95%"}}
                         multiline={true}
@@ -107,10 +127,15 @@ export default function LogList({ navigation }) {
                     style={{paddingHorizontal: 25, paddingVertical: 7.5, backgroundColor: "#8F00FF", borderRadius: 7.5,marginTop: 15}}
                     onPress={()=> {
                         var curr = list;
-                        curr.push({
+                        let log = {
                             log: logText,
                             date: Date.now()
-                        })
+                        }
+                        if (feelingLog != null) {
+                            log.feelingRating = feelingLog;
+                        }
+                        console.log(log);
+                        curr.push(log);
                         setList(curr);
                         setLogText("");
                         storeLogs(curr);
@@ -128,7 +153,8 @@ export default function LogList({ navigation }) {
                     return (
                         <View style={{width: "100%", paddingVertical: 10, justifyContent: "center", alignItems: "center"}}>
                             <View style={{width: "85%", paddingVertical: 20, paddingHorizontal: 15, backgroundColor: "white", borderRadius: 10, justifyContent: "center", alignItems: "flex-start"}}>
-                                <Text numberOfLines={-1} style={{fontFamily: "Lato-Regular", fontSize: 16}}>{item.log}</Text>
+                                {item.feelingRating != null ? <Text style={{fontFamily: "Lato-Bold", fontSize: 17, marginBottom: 5}}>{feelingString(item.feelingRating)}</Text> : null}
+                                <Text numberOfLines={-1} style={{fontFamily: "Lato-Regular", fontSize: 16, marginBottom: 5}}>{item.log}</Text>
                                 {item.date != null ? <Text style={{color: "#AAA", fontFamily: "Lato-Regular", fontSize: 14}}>{getFormattedDate(item.date)}</Text> : null}
                             </View>
                         </View>
