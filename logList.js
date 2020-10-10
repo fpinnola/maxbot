@@ -172,7 +172,7 @@ export default function LogList({ navigation }) {
                     <TouchableOpacity 
                     style={{paddingHorizontal: 25, paddingVertical: 7.5, backgroundColor: "#8F00FF", borderRadius: 7.5,marginTop: 15}}
                     onPress={()=> {
-                        // var curr = list;
+                        var curr = logs;
                         let log = {
                             log: logText,
                             date: Date.now()
@@ -180,10 +180,9 @@ export default function LogList({ navigation }) {
                         if (feelingLog != null) {
                             log.feelingRating = feelingLog;
                         }
-                        console.log(log);
                         curr.push(log);
-                        // setList(curr);
                         setLogText("");
+                        setFeelingLog(0.5);
                         storeLogs(curr);
                         setAddLogVisible(false);
                     }}>
@@ -197,7 +196,6 @@ export default function LogList({ navigation }) {
                 keyExtractor={(item) => item.log}
                 stickySectionHeadersEnabled={false}
                 renderSectionHeader={({ section: { title } }) => {
-                    console.log(title);
                     return (
                         <View style={{width: "100%", paddingVertical: 5, justifyContent: "center", alignItems: "center"}}>
                             <View style={{width: "85%"}}>

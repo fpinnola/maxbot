@@ -19,7 +19,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.frankpinnola.salus"
+      "bundleIdentifier": "com.frankpinnola.salus",
+      "buildNumber": "3"
     },
     "web": {
       "favicon": "./assets/favicon.png"
