@@ -2,10 +2,10 @@ import {
     createStackNavigator,
     TransitionPresets,
   } from "react-navigation-stack";
-  import { createAppContainer } from "react-navigation";
-  import Chat from "./Chat";
-import Splash from "./splash";
-import LogList from "./logList";
+import { createAppContainer } from "react-navigation";
+import Chat from "../screens/Chat";
+import Splash from "../screens/splash";
+import LogList from "../screens/logList";
 
   const screens = {
     Splash: {

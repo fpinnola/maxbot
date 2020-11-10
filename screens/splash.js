@@ -1,10 +1,9 @@
 import React from 'react';
 import { ImageBackground, Text, TouchableOpacity } from "react-native";
-import Chat from './Chat'
 import LogList from './logList';
 export default function Splash({ navigation }) {
     return (
-        <ImageBackground style={{width: "100%", height: "100%"}} source={require('./assets/healthyfern.jpeg')} >
+        <ImageBackground style={{width: "100%", height: "100%"}} source={require('../assets/healthyfern.jpeg')} >
             <TouchableOpacity 
             activeOpacity={0.8}
             onPress={() => {

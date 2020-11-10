@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacityBase } from 'react-native';
-import Chat from "./Chat.js"
+import React, {useState} from 'react';
+import { View } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from "expo";
-import MainStack from "./mainstack"
+import MainStack from "./routes/mainstack"
 
 
 const getFonts = () => 

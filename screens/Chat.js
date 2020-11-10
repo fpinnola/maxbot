@@ -156,7 +156,7 @@ export default function Chat() {
             setFeelingLoggerOpen(true);
         }}
         style={{position: "absolute",zIndex: 1, width: 50, height: 50, justifyContent: "center", alignItems: "center", backgroundColor: "#8F00FF", borderRadius: 25, right: 25, top: 25}}>
-            <Image style={{height: 24, width: 24}} source={require('./assets/medical.png')}/>
+            <Image style={{height: 24, width: 24}} source={require('../assets/medical.png')}/>
         </TouchableOpacity>
       }
       <FlatList 

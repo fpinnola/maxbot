@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Modal, Text, FlatList, SectionList, TouchableOpacity, TextInput, Image, StyleSheet, Alert, AsyncStorage } from "react-native";
-import Chat from './Chat';
-import FeelingLogger from './feelingLogger';
+import { View, Modal, Text, SectionList, TouchableOpacity, TextInput, Image, StyleSheet, Alert, AsyncStorage } from "react-native";
+import FeelingLogger from '../components/feelingLogger';
 
 export default function LogList({ navigation }) {
     const [list, setList] = useState([]);
@@ -221,7 +220,7 @@ export default function LogList({ navigation }) {
                 setAddLogVisible(true);
             }}
             style={styles.logButton}>
-                <Image style={styles.penImage} source={require('./assets/pen.png')}/>
+                <Image style={styles.penImage} source={require('../assets/pen.png')}/>
             </TouchableOpacity>
         </View>
     )
